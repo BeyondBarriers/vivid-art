@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="50" height="50" viewBox="0 0 50 50" xml:space="preserve">
+<desc>Created with Fabric.js 5.3.0</desc>
+<defs>
+</defs>
+<g transform="matrix(1 0 0 1 29.7270971843 18.6073169849)" id="HLvjkS53CStygJ9zM9FoO"  >
+<path style="stroke: rgb(241,196,0); stroke-width: 2.6; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 10; fill: rgb(241,196,0); fill-rule: nonzero; opacity: 1;"  transform=" translate(0, 0)" d="M -5.60501 15.00967 L -17.35908 17.31372 L -15.038179999999999 5.59775 L 8.01778 -17.31373 C 13.89069 -11.484839999999998 17.00445 -8.40786 17.35906 -8.082799999999999 z" stroke-linecap="round" />
+</g>
+<g transform="matrix(1 0 0 1 18.7687785632 29.5639375842)" id="lh0M9DWMrdNxNBrwrLn2Q"  >
+<path style="stroke: rgb(241,196,0); stroke-width: 0.15; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;"  transform=" translate(-0.000005, 0)" d="M -3.98624 1.90809 L -2.84275 -3.9737500000000003 L 3.9862499999999996 2.8232699999999995 L -1.9237000000000006 3.9737499999999994 z" stroke-linecap="round" />
+</g>
+<g transform="matrix(1 0 0 1 23.05264444 43.7325017735)" id="kUI_xFmv7GkBLXKrKrCfc"  >
+<path style="stroke: rgb(241,196,0); stroke-width: 2.8; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"  transform=" translate(0, 0)" d="M -14.08206 -4.90575 C -14.08206 -4.90575 -19.94128 -2.7360300000000004 -20.01949 0.6168899999999997 C -20.0977 3.96981 -17.02861 4.413539999999999 -17.02861 4.413539999999999 C -17.02861 4.413539999999999 -14.841180000000001 4.877699999999999 -11.70564 3.4750299999999994 C -8.5701 2.0723599999999993 -4.486460000000001 -1.0755800000000004 -4.486460000000001 -1.0755800000000004 C -4.486460000000001 -1.0755800000000004 -1.2520300000000009 -3.0758300000000003 1.9473499999999992 -3.5963000000000003 C 5.14673 -4.116770000000001 8.9355 -4.10794 13.49745 -2.06346 C 18.05941 -0.018990000000000062 20.02095 4.90575 20.02095 4.90575" stroke-linecap="round" />
+</g>
+</svg>

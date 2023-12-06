@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="200" height="200" viewBox="0 0 200 200" xml:space="preserve">
+<desc>Created with Fabric.js 5.3.0</desc>
+<defs>
+</defs>
+<g transform="matrix(5.1493879786 0 0 5.1493879786 100 100)" id="tGz_D3xyVsiL4HO6514gR"  >
+<path style="stroke: rgb(139,171,222); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(241,196,0); fill-rule: nonzero; opacity: 1;"  transform=" translate(0, 0)" d="M 0 -17.70401 C 9.77261 -17.70401 17.70401 -9.77261 17.70401 0 C 17.70401 9.77261 9.77261 17.70401 0 17.70401 C -9.77261 17.70401 -17.70401 9.77261 -17.70401 0 C -17.70401 -9.77261 -9.77261 -17.70401 0 -17.70401 z" stroke-linecap="round" />
+</g>
+<g transform="matrix(2.1978021978 0 0 2.1978021978 100 100)" id="bKUwwmEC5dCL63bMfIqK7"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"  transform=" translate(-45, -45)" d="M 45 0 C 20.147 0 0 20.147 0 45 C 0 69.85300000000001 20.147 90 45 90 C 69.85300000000001 90 90 69.85300000000001 90 45 C 90 20.147 69.853 0 45 0 z M 45 22.007 C 53.899 22.007 61.14 29.248 61.14 38.147000000000006 C 61.14 47.047000000000004 53.899 54.287000000000006 45 54.287000000000006 C 36.1 54.287000000000006 28.86 47.047000000000004 28.86 38.147000000000006 C 28.86 29.248 36.1 22.007 45 22.007 z M 45 83.843 C 33.865 83.843 23.877 78.958 17.043 71.22 C 20.22 65.47 25.186999999999998 60.744 31.093 57.879 C 33.102 56.905 35.447 56.921 37.528 57.919999999999995 C 39.870999999999995 59.04599999999999 42.385 59.61599999999999 45.001 59.61599999999999 C 47.616 59.61599999999999 50.131 59.044999999999995 52.474 57.919999999999995 C 54.556999999999995 56.919999999999995 56.901999999999994 56.904999999999994 58.909 57.879 C 64.815 60.742999999999995 69.781 65.47 72.958 71.22 C 66.123 78.957 56.135 83.843 45 83.843 z" stroke-linecap="round" />
+</g>
+</svg>

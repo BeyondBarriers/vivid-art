@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+    font-family: var(--font-inter);
+    -ms-overflow-style: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+    *::-webkit-scrollbar {
+        width: 10px;
+        position: fixed;
+    }
+    *::-webkit-scrollbar-track {
+        border-radius: 20px;
+    }
+    *::-webkit-scrollbar-thumb {
+        background: #00000015;
+        border-radius: 5px;
+    }
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+}
+u, button, input[type=submit] {
+    cursor: pointer;
+}
+@font-face {
+    font-family: MaryKate;
+    src: url('/fonts/FontsFree-Net-Marykate-Regular.ttf');
+}
+@font-face {
+    font-family: MaryKate Outline;
+    src: url('/fonts/FontsFree-Net-Marykate-Outline.ttf');
+}

@@ -1,0 +1,169 @@
+.logo {
+    background-color: #FFFFFF;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    font-size: 42px;
+    font-family: MaryKate;
+    color: #000000;
+}
+    .logo:hover {
+        cursor: pointer;
+        color: #F1C400;
+    }
+.text {
+    width: 100%;
+	font-family: MaryKate;
+	font-size: 24px;
+    text-align: center;
+	color: #000000;
+}
+.sideButton {
+    background-color: #FFFFFF;
+    width: 60%;
+    border: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+    .sideButton:hover {
+        color: #F1C400;
+    }
+.header {
+    background-color: #FFFFFF;
+    width: 60%;
+    border: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.sideText {
+    width: 100%;
+    font-family: MaryKate;
+    font-size: 24px;
+    text-align: left;
+}
+.sideTextOpen {
+    width: 100%;
+    font-family: MaryKate;
+    font-size: 24px;
+    text-align: left;
+    color: #F1C400;
+}
+.underline {
+    background-color: #F1C400;
+    width: 45px;
+    height: 5px;
+    align-self: flex-start;
+    position: relative;
+    top: -20px;
+    left: 33%;
+}
+.sideBar {
+    background-color: #FFFFFF;
+    min-width: 275px;
+    width: 20%;
+    height: 100%;
+    padding-top: 130px;
+    border-right: 3px solid #000000;
+    flex-direction: column;
+    align-items: center;
+	position: fixed;
+    top: 0;
+    left: 0;
+    overflow: overlay;
+    z-index: 100;
+}
+.menu {
+    background-color: #FFFFFF;
+    border: none;
+    position: fixed;
+    right: 30px;
+}
+.navButton {
+    background-color: #FFFFFF;
+    padding-left: 3%;
+    padding-right: 3%;
+    border: none;
+    font-family: MaryKate;
+    font-size: 26px;
+}
+    .navButton:hover {
+        color: #F1C400;
+    }
+.navBarLogo {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 30px;
+    font-size: 34px;
+    font-family: MaryKate;
+    color: #000000;
+}
+    .navBarLogo:hover {
+        cursor: pointer;
+        color: #F1C400;
+    }
+.navBar {
+    background-color: #FFFFFF;
+    max-width: calc(100% - 275px);
+    width: 80%;
+    height: 75px;
+    border-bottom: 3px solid #000000;
+    box-shadow: 0px 10px 0px #00000015;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    right: 0;
+}
+.title {
+    background: transparent;
+    width: 100%;
+    margin: 24px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: MaryKate;
+    font-size: 36px;
+    text-align: center;
+    text-decoration: underline;
+}
+    .title:focus {
+        outline: none;
+        border-radius: 5px;
+    }
+.paletteColor {
+    height: 35px;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+}
+.inputText {
+    width: 100%;
+    margin-left: 10px;
+    border: none;
+	font-family: MaryKate;
+	font-size: 18px;
+    text-align: left;
+	color: #000000;
+}
+    .inputText::placeholder {
+        color: #000000;
+    }
+    .inputText::placeholder:hover {
+        color: #F1C400;
+    }
+    .inputText:focus, .inputText:hover {
+        color: #F1C400;
+        outline: none;
+    }

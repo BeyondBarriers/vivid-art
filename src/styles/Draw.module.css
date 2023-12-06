@@ -1,0 +1,109 @@
+.palette {
+    background-color: #FFFFFF;
+    width: 65%;
+    aspect-ratio: 1 / 0.1;
+    padding-left: 2%;
+    padding-right: 2%;
+    border: 2px solid #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 8%;
+    left: 17.5%;
+	z-index: 1;
+}
+    .palette:hover {
+        outline: 2px solid #FFFFFF;
+    }
+.shadow {
+    background-color: #000000;
+    width: 65%;
+    aspect-ratio: 1 / 0.1;
+    position: fixed;
+    bottom: 8%;
+    left: 17.5%;
+	transform: translate(-10px, 10px);
+}
+.icon {
+    background-color: #FFFFFF;
+    object-fit: contain;
+    height: 52%;
+    aspect-ratio: 1 / 1;
+    border: none;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.iconButton {
+    background-color: #FFFFFF;
+    border: none;
+}
+.colorButton {
+    height: 75%;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+}
+    .colorButton:hover {
+        outline: 2px solid #000000;
+    }
+.saveButton {
+    background-color: #F1C400;
+    width: 100px;
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 20px;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFFFFF;
+    font-family: MaryKate;
+    font-size: 26px;
+}
+    .saveButton:hover {
+        border-radius: 0px 0px 10px 10px;
+    }
+.dropUp {
+    position: relative;
+    display: inline-block;
+}
+    .dropUp:hover .saveButton {
+        border-radius: 0px 0px 10px 10px;
+    }
+    .dropUp:hover .dropMenu {
+        display: block;
+    }
+.dropMenu {
+    position: absolute;
+    display: none;
+    bottom: 40px;
+    z-index: 100;
+}
+.dropButton {
+    background-color: #FFFFFF;
+    width: 100px;
+    height: 40px;
+    padding-left: 20px;
+    border: none;
+    color: #5F5F5F;
+    text-align: left;
+}
+    .dropButton:first-child {
+        border-radius: 10px 10px 0px 0px;
+    }
+    .dropButton:hover {
+        background-color: #F0F0F0;
+    }
+.toolBox {
+    background-color: transparent;
+    width: 60%;
+    display: inline-flex;
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    bottom: 50px;
+}
