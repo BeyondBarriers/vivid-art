@@ -43,7 +43,7 @@ function Title() {
     )
 }
 
-function open(type, router, e, width, height) {
+function open(type, router) {
     const paletteBar = document.getElementById('palettesidebar')
     const saveBar = document.getElementById('savesidebar')
     const uploadBar = document.getElementById('uploadsidebar')
@@ -57,7 +57,7 @@ function open(type, router, e, width, height) {
     } else if (type == 'Save') {
         saveBar.style.display = 'flex'
     } else if (type == 'Upload') {
-        upload(e, width, height)
+        upload()
     } else if (type == 'Settings') {
         settingsBar.style.display = 'flex'
     } else if (type == 'Exit') {
@@ -68,11 +68,10 @@ function open(type, router, e, width, height) {
 
 function SideButton({ text }) {
     const router = useRouter()
-    const {width, height} = useWindowSize()
     var image = '/icons/' + text.toLowerCase() + '.svg'
     return (
         <button className={styles.sideButton}
-            onClick={(e) => open(text, router, e, width, height)}
+            onClick={() => open(text, router)}
             onMouseOver={(e) => imageHighlight(text.toLowerCase(), true, e)}
             onMouseLeave={(e) => imageHighlight(text.toLowerCase(), false, e)}>
             <Image
@@ -269,18 +268,17 @@ export function SaveSideBar({ user }) {
     )
 }
 
-async function upload(event, width, height) {
-    alert('Uploading square...')
+async function upload() {
     const reader = new FileReader()
-    const canvas = document.getElementById('canvas')
-    const context = canvas.getContext('2d')
-    var image = document.createElement('img')
-    console.log(canvas)
     try {
-        image.src = '/square.png'
-        context.drawImage(image, width/4 + 100, height/5 - 10, 500, 500)
-        console.log(image)
-        reader.readAsDataURL(new Blob(imageFile))
+        const [fileHandle] = await window.showOpenFilePicker()
+        const imageFile = await fileHandle.getFile();
+        reader.addEventListener('load', () => {
+            let popup = document.getElementById('clear')
+            popup.alt = reader.result
+            popup.style.display = 'block'
+        })
+        reader.readAsDataURL(imageFile)
     } catch (e) {
         console.log(e)
     }

@@ -1,6 +1,6 @@
 import { storage } from '../configFirebase'
 import { ref, uploadString } from 'firebase/storage'
-import { getDrawing, updateDrawing } from '../components/Utilities'
+import { Popup, Header, Text, getDrawing, updateDrawing, Button } from '../components/Utilities'
 import { DrawNavBar, SaveSideBar, DrawSideBar, PaletteSideBar, SettingsSideBar, UploadSideBar } from '../components/DrawNavigation'
 import styles from '../styles/Draw.module.css'
 import useWindowSize from '../hooks/useWindowSize'
@@ -103,7 +103,7 @@ export async function getServerSideProps() {
     var user = {
         NAME: 'Georgie Smith',
         TITLE: 'Achievement/Title'
-    }                                                                                                                   
+    }
     return (
         {props: {
             PALETTE: colors,
@@ -113,26 +113,49 @@ export async function getServerSideProps() {
     )
 }
 
+function clear(width, height) {
+    const popup = document.getElementById('clear')
+    popup.style.display = 'none'
+    const canvas = document.getElementById('canvas')
+    const context = canvas.getContext('2d')
+    context.clearRect(0, 0, width, height)
+    var image = document.getElementById('backgroundImage')
+    image.src = popup.alt
+}
+
 function Draw(props) {
     const { width, height } = useWindowSize()
     if (props) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <img
-                    id='img'
-                    style={{ display: 'none' }}
-                />
+                {/*Navigation*/}
                 <DrawSideBar user={props.USER}/>
                 <DrawNavBar/>
                 <PaletteSideBar palette={props.PALETTE} user={props.USER}/>
                 <SaveSideBar user={props.USER}/>
                 <UploadSideBar user={props.USER}/>
                 <SettingsSideBar user={props.USER}/>
+                
+                {/*Drawing*/}
+                <img
+                    id='img'
+                    style={{ display: 'none' }}
+                />
+                <img
+                    id='backgroundImage'
+                    width={width}
+                    height={height - 75}
+                    style={{ position: 'absolute', top: '75px' }}
+                />
                 <Canvas
                     width={width}
                     height={height}
                 />
                 <ToolBox colors={props.PALETTE}/>
+                <Popup id='clear'>
+                    <Header text='Clear the current canvas?'/>
+                    <Button onClick={() => clear(width, height)} text='Clear canvas'/>
+                </Popup>
             </div>
         )
     }

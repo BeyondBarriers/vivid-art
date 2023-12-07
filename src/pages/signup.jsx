@@ -80,6 +80,7 @@ async function createUserWithGoogle(router) {
     }).catch((e) => {
         error.style.display = 'block'
         error.innerText = 'Unable to sign in with Google.'
+        console.log(e)
     })
 }
 

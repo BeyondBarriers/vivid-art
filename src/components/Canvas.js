@@ -1,4 +1,5 @@
 import { useDraw } from '../hooks/useDraw'
+import { useState } from 'react'
 
 const Canvas = ({ width, height }) => {
     const { setCanvasRef, onCanvasMouseDown } = useDraw(onDraw)
@@ -20,10 +21,10 @@ const Canvas = ({ width, height }) => {
         <canvas
             id='canvas'
             width={width}
-            height={height}
+            height={height-75}
             onMouseDown={onCanvasMouseDown}
             ref={setCanvasRef}
-            style={{ width: '100%', height: '100%' }}
+            style={{ position: 'absolute', top: '75px' }}
         />
     )
 }

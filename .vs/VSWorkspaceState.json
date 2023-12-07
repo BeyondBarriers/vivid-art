@@ -2,13 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\public",
-    "\\public\\icons",
     "\\src",
     "\\src\\components",
     "\\src\\hooks",
     "\\src\\pages",
     "\\src\\pages\\api",
+    "\\src\\pages\\setup",
+    "\\src\\pages\\[dashboard]",
     "\\src\\styles"
   ],
+  "SelectedNode": "\\src\\pages\\template.jsx",
   "PreviewInSolutionExplorer": false
 }

@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react'
 
+ // @ts-ignore
 export function useDraw(onDraw) {
     const canvasRef = useRef(null)
     const isDrawingRef = useRef(false)
     const prevPointRef = useRef(null)
     const mouseMoveListenerRef = useRef(null)
     const mouseUpListenerRef = useRef(null)
+     // @ts-ignore
     function setCanvasRef(ref) {
         canvasRef.current = ref
     }
@@ -13,8 +15,10 @@ export function useDraw(onDraw) {
         isDrawingRef.current = true
     }
     useEffect(() => {
+         // @ts-ignore
         function computePointInCanvas(clientX, clientY) {
             if (canvasRef.current) {
+                 // @ts-ignore
                 const boundingRect = canvasRef.current.getBoundingClientRect();
                 return {
                     x: clientX - boundingRect.left,
@@ -25,14 +29,18 @@ export function useDraw(onDraw) {
             }
         }
         function initMouseMoveListener() {
+             // @ts-ignore
             const mouseMoveListener = (e) => {
                 if (isDrawingRef.current && canvasRef.current) {
                     const point = computePointInCanvas(e.clientX, e.clientY)
+                     // @ts-ignore
                     const ctx = canvasRef.current.getContext('2d')
                     if (onDraw) onDraw(ctx, point, prevPointRef.current)
+                     // @ts-ignore
                     prevPointRef.current = point
                 }
             }
+             // @ts-ignore
             mouseMoveListenerRef.current = mouseMoveListener;
             window.addEventListener("mousemove", mouseMoveListener)
         }
@@ -41,6 +49,7 @@ export function useDraw(onDraw) {
                 isDrawingRef.current = false
                 prevPointRef.current = null
             }
+             // @ts-ignore
             mouseUpListenerRef.current = listener
             window.addEventListener("mouseup", listener)
         }
