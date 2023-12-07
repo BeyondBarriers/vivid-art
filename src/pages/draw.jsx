@@ -113,14 +113,27 @@ export async function getServerSideProps() {
     )
 }
 
-function clear(width, height) {
+function uploadPage(clear, width, height) {
     const popup = document.getElementById('clear')
     popup.style.display = 'none'
     const canvas = document.getElementById('canvas')
     const context = canvas.getContext('2d')
-    context.clearRect(0, 0, width, height)
-    var image = document.getElementById('backgroundImage')
+    if (clear) {
+        context.clearRect(0, 0, width, height)
+    }
+    let image = document.createElement('img')
     image.src = popup.alt
+    image.onload = () => {
+        let imageHeight = height - 75 - (width * 0.65 * 0.1) - (height * 0.08)
+        let imageWidth = (imageHeight / image.naturalHeight) * image.naturalWidth
+        let x = (width / 2) - (imageWidth / 2)
+        context.drawImage(image, x, 0, imageWidth, imageHeight)
+    }
+}
+
+function next() {
+    const popup = document.getElementById('uploadFail')
+    popup.style.display = 'none'
 }
 
 function Draw(props) {
@@ -133,28 +146,20 @@ function Draw(props) {
                 <DrawNavBar/>
                 <PaletteSideBar palette={props.PALETTE} user={props.USER}/>
                 <SaveSideBar user={props.USER}/>
-                <UploadSideBar user={props.USER}/>
                 <SettingsSideBar user={props.USER}/>
                 
                 {/*Drawing*/}
-                <img
-                    id='img'
-                    style={{ display: 'none' }}
-                />
-                <img
-                    id='backgroundImage'
-                    width={width}
-                    height={height - 75}
-                    style={{ position: 'absolute', top: '75px' }}
-                />
-                <Canvas
-                    width={width}
-                    height={height}
-                />
+                <img id='img' style={{ display: 'none' }}/>
+                <Canvas width={width} height={height}/>
                 <ToolBox colors={props.PALETTE}/>
                 <Popup id='clear'>
                     <Header text='Clear the current canvas?'/>
-                    <Button onClick={() => clear(width, height)} text='Clear canvas'/>
+                    <Button onClick={() => uploadPage(true, width, height)} text='Clear canvas'/>
+                    <Button onClick={() => uploadPage(false, width, height)} text='Keep canvas'/>
+                </Popup>
+                <Popup id='uploadFail'>
+                    <Header text='Unable to upload image.'/>
+                    <Button onClick={() => next()} text='Continue'/>
                 </Popup>
             </div>
         )

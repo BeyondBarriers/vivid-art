@@ -46,11 +46,9 @@ function Title() {
 function open(type, router) {
     const paletteBar = document.getElementById('palettesidebar')
     const saveBar = document.getElementById('savesidebar')
-    const uploadBar = document.getElementById('uploadsidebar')
     const settingsBar = document.getElementById('settingssidebar')
     saveBar.style.display = 'none'
     paletteBar.style.display = 'none'
-    uploadBar.style.display = 'none'
     settingsBar.style.display = 'none'
     if (type == 'Palette') {
         paletteBar.style.display = 'flex'
@@ -213,7 +211,8 @@ function save(type) {
     } else if (type == 'Download') {
         // creates png to download
         let downloadLink = document.createElement('a');
-        downloadLink.setAttribute('download', 'CanvasAsImage.png');
+        const title = document.getElementById('canvas').title
+        downloadLink.setAttribute('download', title + '.png');
         var canvas = document.getElementById('canvas')
 
         // adds white background
@@ -280,19 +279,8 @@ async function upload() {
         })
         reader.readAsDataURL(imageFile)
     } catch (e) {
-        console.log(e)
+        // add a popup that says upload did not owrk
     }
-}
-
-export function UploadSideBar({ user }) {
-    return (
-        <div id='uploadsidebar' className={styles.sideBar} style={{display: 'none'}}>
-            <Logo/>
-            <Back/>
-            <Profile name={user.NAME}/>
-            <Heading text='Upload'/>
-        </div>
-    )
 }
 
 export function SettingsSideBar({ user }) {
@@ -314,7 +302,7 @@ export function DrawSideBar({ user }) {
             <SideButton text='Palette'/>
             <SideButton text='Upload'/>
             <SideButton text='Save'/>
-            <SideButton text='Settings'/>
+            {/*<SideButton text='Settings'/>*/}
             <SideButton text='Exit'/>
         </div>
     )

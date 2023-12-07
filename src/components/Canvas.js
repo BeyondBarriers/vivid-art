@@ -20,6 +20,7 @@ const Canvas = ({ width, height }) => {
     return (
         <canvas
             id='canvas'
+            title='Untitled Drawing'
             width={width}
             height={height-75}
             onMouseDown={onCanvasMouseDown}
