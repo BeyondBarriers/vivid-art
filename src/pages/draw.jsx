@@ -8,7 +8,8 @@ import Canvas from '../components/Canvas'
 import Image from 'next/image'
 
 // redesigning coloring page
-async function changeColor(event, color) {
+async function changeColor(event) {
+    const color = event.currentTarget.style.backgroundColor
     const canvas = document.getElementById('canvas')
     const context = canvas.getContext('2d')
     context.strokeStyle = color
@@ -46,11 +47,11 @@ async function changeTool(event, tool) {
     }
 }
 // each button will have a unique id that can be accessed by the changecolor function
-function ColorButton({ color }) {
+function ColorButton({ color, id }) {
     return (
-        <button className={styles.colorButton}
+        <button className={styles.colorButton} id={id}
             style={{ backgroundColor: color }}
-            onClick={(e) => changeColor(e, color)}>
+            onClick={(e) => changeColor(e)}>
         </button>
     )
 }
@@ -153,9 +154,11 @@ function Draw(props) {
                 <Canvas width={width} height={height}/>
                 <ToolBox colors={props.PALETTE}/>
                 <Popup id='clear'>
-                    <Header text='Clear the current canvas?'/>
-                    <Button onClick={() => uploadPage(true, width, height)} text='Clear canvas'/>
-                    <Button onClick={() => uploadPage(false, width, height)} text='Keep canvas'/>
+                    <Header text='Clear the canvas?'/>
+                    <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                        <Button onClick={() => uploadPage(true, width, height)} text='Clear canvas'/>
+                        <Button onClick={() => uploadPage(false, width, height)} text='Keep canvas'/>
+                    </div>
                 </Popup>
                 <Popup id='uploadFail'>
                     <Header text='Unable to upload image.'/>

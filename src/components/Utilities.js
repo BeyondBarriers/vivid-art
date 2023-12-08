@@ -48,11 +48,14 @@ export function Text({ text }) {
 
 export function Button({ onClick, text, children }) {
     return (
-        <button className={styles.button}
-            onClick={onClick}>
-            {text}
-            {children}
-        </button>
+        <div style={{width: '35%'}}>
+            <button className={styles.button}
+                onClick={onClick}>
+                {text}
+                {children}
+            </button>
+            <div className={styles.buttonShadow}></div>
+        </div>
     )
 }
 
@@ -116,4 +119,8 @@ export function onlyLetters(string) {
 
 export function onlyNumbersAndLetters(string) {
     return /^[A-Za-z0-9]*$/.test(string)
+}
+
+export function isHexCode(string) {
+    return string.length == 7 && /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test(string)
 }

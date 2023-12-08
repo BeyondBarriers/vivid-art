@@ -153,17 +153,13 @@
     margin-left: 10px;
     border: none;
 	font-family: MaryKate;
-	font-size: 18px;
+	font-size: 20px;
     text-align: left;
 	color: #000000;
 }
-    .inputText::placeholder {
-        color: #000000;
-    }
-    .inputText::placeholder:hover {
+    .inputText:hover {
         color: #F1C400;
     }
-    .inputText:focus, .inputText:hover {
-        color: #F1C400;
+    .inputText:focus {
         outline: none;
     }

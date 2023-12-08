@@ -5,6 +5,7 @@ import { ref, uploadString } from 'firebase/storage'
 import { Logo, NavBarLogo, Profile, imageHighlight } from '../components/Navigation'
 import { useRouter } from 'next/router'
 import useWindowSize from '../hooks/useWindowSize'
+import { isHexCode } from './Utilities'
 
 function showSideBar(event) {
     const sideBar = document.getElementById('sidebar')
@@ -118,11 +119,29 @@ function Heading({ text }) {
     )
 }
 
+function changeColor(event, id) {
+    const input = event.currentTarget
+    const colorButton = document.getElementById(id)
+    const canvas = document.getElementById('canvas')
+    const context = canvas.getContext('2d')
+    var previous = input.getAttribute('data-previous')
+    if (isHexCode(input.value)) {
+        colorButton.style.backgroundColor = input.value
+        const colorPicker = document.getElementById(id + 'mini')
+        colorPicker.style.backgroundColor = input.value
+        if (context.strokeStyle == previous) {
+            context.strokeStyle = input.value
+            context.fillStyle = input.value
+        }
+        input.setAttribute('data-previous', input.value)
+    }
+}
+
 function Color({ color }) {
     return (
         <div style={{display: 'inline-flex', width: '60%', marginBottom: '16px'}}>
-            <div className={styles.paletteColor} style={{backgroundColor: color}}></div>
-            <input className={styles.inputText} style={{fontSize: '30px'}} placeholder={color}/>
+            <div className={styles.paletteColor} style={{backgroundColor: color}} id={color + 'mini'}></div>
+            <input data-previous={color} className={styles.inputText} placeholder={color} onChange={(e) => changeColor(e, color)}/>
         </div>
     )
 }
@@ -131,11 +150,9 @@ function back() {
     const sideBar = document.getElementById('sidebar')
     const paletteBar = document.getElementById('palettesidebar')
     const saveBar = document.getElementById('savesidebar')
-    const uploadBar = document.getElementById('uploadsidebar')
     paletteBar.style.display = 'none'
     saveBar.style.display = 'none'
     sideBar.style.display = 'flex'
-    uploadBar.style.display = 'none'
 }
 
 function Back() {
