@@ -1,13 +1,12 @@
-import { storage } from '../configFirebase'
+import { storage } from '../../configFirebase'
 import { ref, uploadString } from 'firebase/storage'
-import { Popup, Header, Text, getDrawing, updateDrawing, Button } from '../components/Utilities'
-import { DrawNavBar, SaveSideBar, DrawSideBar, PaletteSideBar, SettingsSideBar, UploadSideBar } from '../components/DrawNavigation'
-import styles from '../styles/Draw.module.css'
-import useWindowSize from '../hooks/useWindowSize'
-import Canvas from '../components/Canvas'
+import { Popup, Header, getUser, getDrawing, newDrawing, Button } from '../../components/Utilities'
+import { DrawNavBar, SaveSideBar, DrawSideBar, PaletteSideBar, SettingsSideBar } from '../../components/DrawNavigation'
+import styles from '../../styles/Draw.module.css'
+import useWindowSize from '../../hooks/useWindowSize'
+import Canvas from '../../components/Canvas'
 import Image from 'next/image'
 
-// redesigning coloring page
 async function changeColor(event) {
     const color = event.currentTarget.style.backgroundColor
     const canvas = document.getElementById('canvas')
@@ -19,10 +18,15 @@ async function changeColor(event) {
         colorButton.style.outline = 'none'
         colorButton = colorButton.nextElementSibling
     }
+    var sideButton = document.getElementById('palettesidebar').firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling
+    for (let i = 0; i < 8; i++) {
+        sideButton.firstElementChild.nextElementSibling.style.outline = 'none'
+        sideButton = sideButton.nextElementSibling
+    }
     event.currentTarget.style.outline = '2px solid #000000'
+    document.getElementById(event.currentTarget.id + 'mini').style.outline = '2px solid #000000'
     document.getElementById('eraser').src = '/icons/eraser.svg'
     document.getElementById('pen').src = '/icons/open/pen.svg'
-    await updateDrawing('h6svuOhdSue4m198cMqOYKvmBBK2', 'unqiueId', 'current', color)
 }
 
 async function changeTool(event, tool) {
@@ -30,23 +34,25 @@ async function changeTool(event, tool) {
     const context = canvas.getContext('2d')
     const button = event.currentTarget
     const image = button.firstElementChild
-    if (image.src.includes('open')) {
-        image.src = '/icons/' + tool + '.svg'
-    } else {
-        image.src = '/icons/open/' + tool + '.svg'
-    }
     if (tool == 'eraser') {
+        document.getElementById('eraser').src = '/icons/open/eraser.svg'
         document.getElementById('pen').src = '/icons/pen.svg'
         context.strokeStyle = '#FFFFFF'
         context.fillStyle = '#FFFFFF'
     } else if (tool == 'pen') {
         document.getElementById('eraser').src = '/icons/eraser.svg'
-        const drawing = await getDrawing('h6svuOhdSue4m198cMqOYKvmBBK2', 'unqiueId')
-        context.strokeStyle = drawing.CURRENT
-        context.fillStyle = drawing.CURRENT
+        document.getElementById('pen').src = '/icons/open/pen.svg'
+        var colorButton = document.getElementById('palette').firstElementChild.nextElementSibling
+        for (let i = 0; i < 9; i++) {
+            if (colorButton.style.outline != 'none') {
+                context.strokeStyle = colorButton.style.backgroundColor
+                context.fillStyle = colorButton.style.backgroundColor
+            }
+            colorButton = colorButton.nextElementSibling
+        }
     }
 }
-// each button will have a unique id that can be accessed by the changecolor function
+
 function ColorButton({ color, id }) {
     return (
         <button className={styles.colorButton} id={id}
@@ -92,25 +98,8 @@ function ToolBox({ colors }) {
     return (
         <div style={{width: '100%', border: '2px solid black'}}>
             <Palette colors={colors}/>
-            <div className={styles.shadow}></div>
+            <div className={styles.shadow} id='paletteShadow'></div>
         </div>
-    )
-}
-
-export async function getServerSideProps() {
-    //const drawing = await getDrawing('h6svuOhdSue4m198cMqOYKvmBBK2', 'unqiueId')
-    //const user = await getUser('h6svuOhdSue4m198cMqOYKvmBBK2')
-    var colors = ['#E74236', '#FF914D', '#FFDE59', '#59BD7C', '#0CC0DF', '#9E6EFF', '#FF88D1', '#000000']
-    var user = {
-        NAME: 'Georgie Smith',
-        TITLE: 'Achievement/Title'
-    }
-    return (
-        {props: {
-            PALETTE: colors,
-            CURRENT: '#000000',
-            USER: user
-        }}
     )
 }
 
@@ -137,6 +126,24 @@ function next() {
     popup.style.display = 'none'
 }
 
+export async function getServerSideProps(context) {
+    const uid = context.params.dashboard
+    const drawingId = context.params.drawing
+    const user = await getUser(uid)
+    console.log(user)
+    var drawing = await getDrawing(uid, drawingId)
+    if (!drawing) {
+        drawing = await newDrawing(uid, drawingId)
+    }
+    return (
+        {props: {
+            ID: drawingId,
+            PALETTE: drawing.PALETTE,
+            USER: user
+        }}
+    )
+}
+
 function Draw(props) {
     const { width, height } = useWindowSize()
     if (props) {
@@ -144,9 +151,9 @@ function Draw(props) {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {/*Navigation*/}
                 <DrawSideBar user={props.USER}/>
-                <DrawNavBar/>
+                <DrawNavBar drawingId={props.ID}/>
                 <PaletteSideBar palette={props.PALETTE} user={props.USER}/>
-                <SaveSideBar user={props.USER}/>
+                <SaveSideBar user={props.USER} drawingId={props.ID}/>
                 <SettingsSideBar user={props.USER}/>
                 
                 {/*Drawing*/}

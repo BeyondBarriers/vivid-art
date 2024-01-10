@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import styles from '../styles/Navigation.module.css'
 import { auth } from '../configFirebase'
+import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 function view(router, tab) {
@@ -65,8 +67,10 @@ function showSideBar(event) {
 }
 
 export function NavBarLogo() {
+    const router = useRouter()
     return (
         <button className={styles.navBarLogo}
+            onClick={() => router.push('/')}
             onMouseOver={(e) => imageHighlight('vividArt', true, e)}
             onMouseLeave={(e) => imageHighlight('vividArt', false, e)}>
             <Image
@@ -81,28 +85,40 @@ export function NavBarLogo() {
     )
 }
 
-function open(tab) {
+function open(tab, router) {
     if (tab == 'Draw') {
-        var drawingID = uuidv4()
+        const drawingId = uuidv4()
+        console.log(drawingId)
+        router.push({
+            pathname: '/[dashboard]/[drawing]',
+            query: {dashboard: auth.currentUser.uid, drawing: drawingId}
+        })
     } else if (tab == 'Template') {
-
+        router.push('/template')
     } else if (tab == 'Gallery') {
-        
+        router.push('/gallery')
+    } else if (tab == 'Login') {
+        router.push('/login')
+    } else if (tab == 'Signup') {
+        router.push('/signup')
     }
 }
 
 function NavButton({ text }) {
+    const router = useRouter()
     return (
         <button className={styles.navButton}
-            onClick={() => open(text)}>
+            onClick={() => open(text, router)}>
             {text}
         </button>
     )
 }
 
 export function Logo() {
+    const router = useRouter()
     return (
         <button className={styles.logo}
+            onClick={() => router.push('/')}
             onMouseOver={(e) => imageHighlight('vividArt', true, e)}
             onMouseLeave={(e) => imageHighlight('vividArt', false, e)}>
             <Image
@@ -189,14 +205,32 @@ export function SideBarNavBar() {
 }
 
 export function NavBar() {
-    return (
-        <div id='NavBar'
-            className={styles.navBar} style={{minWidth: '100%'}}>
-            <NavBarLogo/>
-            <NavButton text='Draw'/>
-            <NavButton text='Template'/>
-            <NavButton text='Gallery'/>
-            <Menu/>
-        </div>
-    )
+    const [user, setUser] = useState(false)
+    const router = useRouter()
+    onAuthStateChanged(auth, ( user) => {
+        if (user) {
+            setUser(true)
+        }
+    })
+    if (user) {
+        return (
+            <div id='NavBar'
+                className={styles.navBar} style={{minWidth: '100%'}}>
+                <NavBarLogo/>
+                <NavButton text='Draw'/>
+                <NavButton text='Template'/>
+                <NavButton text='Gallery'/>
+                <Menu/>
+            </div>
+        )
+    } else {
+        return (
+            <div id='NavBar'
+                className={styles.navBar} style={{minWidth: '100%'}}>
+                <NavBarLogo/>
+                <NavButton text='Login'/>
+                <NavButton text='Signup'/>
+            </div>
+        )
+    }
 }

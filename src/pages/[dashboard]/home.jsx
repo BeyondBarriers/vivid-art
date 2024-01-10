@@ -1,15 +1,27 @@
 import Layout from '../../components/Layout'
 import styles from '../../styles/Dashboard.module.css'
-import { getUser } from '../../components/Utilities'
+import { getUser, getDrawings } from '../../components/Utilities'
 import { auth } from '../../configFirebase'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-function Home() {
+export async function getServerSideProps(context) {
+    const uid = context.params.dashboard
+    const drawings = await getDrawings(uid)
+    const user = await getUser(uid)
+    return {
+        props: {
+            USER: user,
+            DRAWINGS: drawings
+        }
+    }
+}
+
+function Home(props) {
     const [user, setUser] = useState(false)
     const router = useRouter()
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (!user) {
             router.push('/login')
         } else {
@@ -17,14 +29,8 @@ function Home() {
         }
     })
     if (user) {
-        const displayName = 'Sally Jenkins' // change default later
-        const userTitle = 'Title/Achievement'
-        const user = {
-            NAME: displayName,
-            TITLE: userTitle
-        }
         return (
-            <Layout open='Home' user={user}>
+            <Layout open='Home' user={props.USER}>
                 <p>Dashboard/Home</p>
             </Layout>
         )

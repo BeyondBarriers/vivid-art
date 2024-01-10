@@ -7,7 +7,17 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-function Groups() {
+export async function getServerSideProps(context) {
+    const uid = context.params.dashboard
+    const user = await getUser(uid)
+    return {
+        props: {
+            USER: user
+        }
+    }
+}
+
+function Groups(props) {
     const [user, setUser] = useState(false)
     const router = useRouter()
     onAuthStateChanged(auth, (user) => {
@@ -18,23 +28,9 @@ function Groups() {
         }
     })
     if (user) {
-        const displayName = 'Sally Jenkins' // change default later
-        const userTitle = 'Title/Achievement'
-        const user = {
-            NAME: displayName,
-            TITLE: userTitle
-        }
-        const data = [
-            {NAME: 'Fantastic Four', COUNT: '14'},
-            {NAME: 'Fantastic Two', COUNT: '12'},
-            {NAME: 'Fantastic Three', COUNT: '13'},
-            {NAME: 'Fantastic Five', COUNT: '15'},
-            {NAME: 'Fantastic Six', COUNT: '16'},
-            {NAME: 'Fantastic Seven', COUNT: '17'}
-        ]
         return (
-            <Layout open='Groups' user={user}>
-                <GroupSection title='Groups' data={data}/>
+            <Layout open='Groups' user={props.USER}>
+                <GroupSection title='Groups' data={props.USER.GROUPS}/>
             </Layout>
         )
     }

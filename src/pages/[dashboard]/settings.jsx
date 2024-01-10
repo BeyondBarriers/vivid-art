@@ -7,10 +7,20 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-function Settings() {
+export async function getServerSideProps(context) {
+    const uid = context.params.dashboard
+    const user = await getUser(uid)
+    return {
+        props: {
+            USER: user,
+        }
+    }
+}
+
+function Settings(props) {
     const [user, setUser] = useState(false)
     const router = useRouter()
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (!user) {
             router.push('/login')
         } else {
@@ -18,23 +28,8 @@ function Settings() {
         }
     })
     if (user) {
-        const displayName = 'Sally Jenkins' // change default later
-        const userTitle = 'Title/Achievement'
-        const user = {
-            NAME: displayName,
-            TITLE: userTitle
-        }
-        const data = [
-            {TITLE: 'New drawing!', DATE: '12-05-2023'}, 
-            {TITLE: 'New drawing 2!', DATE: '12-06-2023'}, 
-            {TITLE: 'New drawing 2!', DATE: '12-06-2023'}, 
-            {TITLE: 'New drawing 2!', DATE: '12-06-2023'}, 
-            {TITLE: 'New drawing 2!', DATE: '12-06-2023'}, 
-            {TITLE: 'New drawing 2!', DATE: '12-06-2023'}, 
-            {TITLE: 'New drawing 2!', DATE: '12-06-2023'}
-        ]
         return (
-            <Layout open='Drawings' user={user}>
+            <Layout open='Settings' user={props.USER}>
                 <p>Settings</p>
             </Layout>
         )

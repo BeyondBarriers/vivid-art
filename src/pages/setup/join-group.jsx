@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styles from '../../styles/Auth.module.css'
-import { onlyNumbersAndLetters, getUser } from '../../components/Utilities'
+import { onlyNumbersAndLetters, getUser, updateUser } from '../../components/Utilities'
 import { Left } from '../../components/AuthLayout'
 import { Input } from '../../pages/signup'
 import { database, auth } from '../../configFirebase'
@@ -17,6 +17,7 @@ async function join(router) {
     await updateDoc(groupRef, {
         USERS: arrayUnion(uid)
     })
+    await updateUser(uid, 'groups', code)
     router.push({
         pathname: '/[dashboard]/home',
         query: {dashboard: uid}

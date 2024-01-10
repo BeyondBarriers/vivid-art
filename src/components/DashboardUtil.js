@@ -55,6 +55,7 @@ export function GroupSection({ title, data }) {
 }
 
 export function DrawingSection({ title, data }) {
+    console.log(data)
     if (data.length == 0) {
         return (
             <div>

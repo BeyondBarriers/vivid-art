@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import styles from '../styles/Navigation.module.css'
-import { storage } from '../configFirebase'
+import { auth, storage } from '../configFirebase'
 import { ref, uploadString } from 'firebase/storage'
 import { Logo, NavBarLogo, Profile, imageHighlight } from '../components/Navigation'
 import { useRouter } from 'next/router'
-import useWindowSize from '../hooks/useWindowSize'
-import { isHexCode } from './Utilities'
+import { isHexCode, updateDrawing } from './Utilities'
+import { get } from 'http'
 
 function showSideBar(event) {
     const sideBar = document.getElementById('sidebar')
@@ -23,22 +23,24 @@ function showSideBar(event) {
     }
 }
 
-function Title() {
+async function rename(event, drawingId) {
+    var title = event.currentTarget.value
+    var canvas = document.getElementById('canvas')
+    canvas.title = title
+    await updateDrawing(auth.currentUser.uid, drawingId, 'title', title)
+}
+
+function Title({ drawingId }) {
     var text = 'Untitled Drawing'
     var color = '#000000'
     if (text == 'Untitled Drawing') {
         color = '#5F5F5F'
     }
-    function rename(event) {
-        var title = event.currentTarget.value
-        var canvas = document.getElementById('canvas')
-        canvas.title = title
-    }
     return (
         <input className={styles.title}
             color={color}
             type='text'
-            onChange={(e) => rename(e)}
+            onChange={(e) => rename(e, drawingId)}
             placeholder={text}
         />
     )
@@ -119,7 +121,7 @@ function Heading({ text }) {
     )
 }
 
-function changeColor(event, id) {
+function changeHexCode(event, id) {
     const input = event.currentTarget
     const colorButton = document.getElementById(id)
     const canvas = document.getElementById('canvas')
@@ -137,11 +139,72 @@ function changeColor(event, id) {
     }
 }
 
+function showColorPicker(id) {
+    const colorPicker = document.getElementById(id + 'picker')
+    const inputColor = document.getElementById(id + 'input')
+    colorPicker.click()
+}
+
+function getColorPicker(id) {
+    const colorPicker = document.getElementById(id + 'picker')
+    const inputColor = document.getElementById(id + 'input')
+    const sideButton = document.getElementById(id + 'mini')
+    const colorButton = document.getElementById(id)
+    const canvas = document.getElementById('canvas')
+    const context = canvas.getContext('2d')
+    const previous = inputColor.getAttribute('data-previous')
+    inputColor.value = colorPicker.value
+    colorButton.style.backgroundColor = colorPicker.value
+    sideButton.style.backgroundColor = colorPicker.value
+    if (context.strokeStyle == previous) {
+        context.strokeStyle = colorPicker.value
+        context.fillStyle = colorPicker.value
+    }
+    inputColor.setAttribute('data-previous', inputColor.value)
+}
+
+async function changePenColor(event) {
+    const color = event.currentTarget.style.backgroundColor
+    const canvas = document.getElementById('canvas')
+    const context = canvas.getContext('2d')
+    context.strokeStyle = color
+    context.fillStyle = color
+    var sideButton = document.getElementById('palettesidebar').firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling
+    for (let i = 0; i < 8; i++) {
+        sideButton.firstElementChild.nextElementSibling.style.outline = 'none'
+        sideButton = sideButton.nextElementSibling
+    }
+    var colorButton = document.getElementById('palette').firstElementChild.nextElementSibling
+    for (let i = 0; i < 9; i++) {
+        colorButton.style.outline = 'none'
+        colorButton = colorButton.nextElementSibling
+    }
+    event.currentTarget.style.outline = '2px solid #000000'
+    document.getElementById(event.currentTarget.id.substring(0, 7)).style.outline = '2px solid #000000'
+    document.getElementById('eraser').src = '/icons/eraser.svg'
+    document.getElementById('pen').src = '/icons/open/pen.svg'
+    await updateDrawing('h6svuOhdSue4m198cMqOYKvmBBK2', 'unqiueId', 'current', color)
+}
+
 function Color({ color }) {
     return (
         <div style={{display: 'inline-flex', width: '60%', marginBottom: '16px'}}>
-            <div className={styles.paletteColor} style={{backgroundColor: color}} id={color + 'mini'}></div>
-            <input data-previous={color} className={styles.inputText} placeholder={color} onChange={(e) => changeColor(e, color)}/>
+            <input type='color' id={color + 'picker'} 
+                onChange={() => getColorPicker(color)}
+                value={color} 
+                style={{position: 'absolute', width: '30px', visibility: 'hidden'}}/>
+            <div className={styles.paletteColor} 
+                style={{backgroundColor: color, zIndex: '1'}} 
+                id={color + 'mini'}
+                onClick={(e) => changePenColor(e)}>
+            </div>
+            <input className={styles.inputText} 
+                data-previous={color}
+                placeholder={color} 
+                id={color + 'input'}
+                onClick={() => showColorPicker(color)} 
+                onChange={(e) => changeHexCode(e, color)}
+            />
         </div>
     )
 }
@@ -150,9 +213,11 @@ function back() {
     const sideBar = document.getElementById('sidebar')
     const paletteBar = document.getElementById('palettesidebar')
     const saveBar = document.getElementById('savesidebar')
+    const settingsBar = document.getElementById('settingssidebar')
     paletteBar.style.display = 'none'
     saveBar.style.display = 'none'
     sideBar.style.display = 'flex'
+    settingsBar.style.display = 'none'
 }
 
 function Back() {
@@ -173,6 +238,10 @@ function Back() {
     )
 }
 
+function useDefaultColors() {
+    console.log('youir mom')
+}
+
 export function PaletteSideBar({ palette, user }) {
     return (
         <div id='palettesidebar' className={styles.sideBar} style={{display: 'none'}}>
@@ -183,11 +252,17 @@ export function PaletteSideBar({ palette, user }) {
             {palette.map((color) => 
                 <Color color={color}/>
             )}
+            <div style={{width: '60%', marginTop: '20px'}}>
+                <button className={styles.toggle} onClick={() => useDefaultColors()}>
+                    Default colors
+                </button>
+                <div className={styles.toggleShadow}></div>
+            </div>
         </div>
     )
 }
 
-function save(type) {
+function save(type, drawingId, userID) {
     if (type == 'Save') {
         // adds white background
         var canvas = document.getElementById('canvas')
@@ -201,8 +276,7 @@ function save(type) {
         ctx.drawImage(canvas, 0, 0)
 
         // upload image
-        var imageID = 'image1'
-        let storageRef = ref(storage, 'images/' + imageID + '.png') // imageid in the localstorage
+        let storageRef = ref(storage, userID + '/' + drawingId + '.png')
         var dataURL = whiteBackground.toDataURL('image/png')
         uploadString(storageRef, dataURL, 'data_url').then((snapshot) => {
             alert('Saved!')
@@ -250,11 +324,11 @@ function save(type) {
     }
 }
 
-function SaveButton({ type }) {
+function SaveButton({ type, drawingId, userID }) {
     var image = '/icons/' + type.toLowerCase() + '.svg'
     return (
         <button className={styles.sideButton} style={{marginTop: '-10px'}}
-            onClick={() => save(type)}
+            onClick={() => save(type, drawingId, userID)}
             onMouseOver={(e) => imageHighlight(type.toLowerCase(), true, e)}
             onMouseLeave={(e) => imageHighlight(type.toLowerCase(), false, e)}>
             <Image
@@ -270,7 +344,7 @@ function SaveButton({ type }) {
     )
 }
 
-export function SaveSideBar({ user }) {
+export function SaveSideBar({ user, drawingId }) {
     return (
         <div id='savesidebar' className={styles.sideBar} style={{display: 'none'}}>
             <Logo/>
@@ -279,7 +353,7 @@ export function SaveSideBar({ user }) {
             <Heading text='Save'/>
             <SaveButton type='Print'/>
             <SaveButton type='Download'/>
-            <SaveButton type='Save'/>
+            <SaveButton type='Save' drawingId={drawingId} userID={user.ID}/>
         </div>
     )
 }
@@ -292,12 +366,41 @@ async function upload() {
         reader.addEventListener('load', () => {
             let popup = document.getElementById('clear')
             popup.alt = reader.result
-            popup.style.display = 'block'
+            popup.style.display = 'flex'
         })
         reader.readAsDataURL(imageFile)
     } catch (e) {
-        // add a popup that says upload did not owrk
+        let popup = document.getElementById('uploadFail')
+        popup.style.display = 'flex'
     }
+}
+
+function showPalette(event) {
+    const button = event.currentTarget
+    const palette = document.getElementById('palette')
+    const paletteShadow = document.getElementById('paletteShadow')
+    if (button.innerText == 'Hide palette') {
+        button.style.backgroundColor = '#F1C400'
+        button.innerText = 'Show palette'
+        palette.style.display = 'none'
+        paletteShadow.style.display = 'none'
+    } else {
+        button.style.backgroundColor = '#FFFFFF'
+        button.innerText = 'Hide palette'
+        palette.style.display = 'flex'
+        paletteShadow.style.display = 'flex'
+    }
+}
+
+function TogglePalette() {
+    return (
+        <div style={{width: '60%'}}>
+            <button className={styles.toggle} onClick={(e) => showPalette(e)}>
+                Hide palette
+            </button>
+            <div className={styles.toggleShadow}></div>
+        </div>
+    )
 }
 
 export function SettingsSideBar({ user }) {
@@ -307,6 +410,7 @@ export function SettingsSideBar({ user }) {
             <Back/>
             <Profile name={user.NAME}/>
             <Heading text='Settings'/>
+            <TogglePalette/>
         </div>
     )
 }
@@ -319,17 +423,17 @@ export function DrawSideBar({ user }) {
             <SideButton text='Palette'/>
             <SideButton text='Upload'/>
             <SideButton text='Save'/>
-            {/*<SideButton text='Settings'/>*/}
+            <SideButton text='Settings'/>
             <SideButton text='Exit'/>
         </div>
     )
 }
 
-export function DrawNavBar() {
+export function DrawNavBar({ drawingId }) {
     return (
         <div id='DrawNavBar' className={styles.navBar} style={{minWidth: '100%', border: 'none', boxShadow: 'none'}}>
             <NavBarLogo/>
-            <Title/>
+            <Title drawingId={drawingId}/>
             <Menu/>
         </div>
     )

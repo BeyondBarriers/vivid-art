@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { useState  } from 'react'
+import { newUser } from '../components/Utilities'
 
 async function next(router) {
     const adminTrue = document.getElementById('Yes, I am.').style.backgroundColor
@@ -16,13 +17,7 @@ async function next(router) {
         error.style.display = 'none'
         var admin = adminFalse == '#FFFFFF' || adminFalse == 'rgb(255, 255, 255)'
         const uid = auth.currentUser.uid
-        const userRef = doc(database, 'users', uid)
-        await setDoc(userRef, {
-            NAME: auth.currentUser.displayName,
-            ADMIN: admin,
-            FRIENDS: [],
-            GROUPS: []
-        })
+        await newUser(uid, auth.currentUser.displayName, admin)
         if (admin) {
             router.push('/setup/create-group')
         } else {

@@ -10,8 +10,11 @@ import { useState } from 'react'
 export async function getServerSideProps(context) {
     const uid = context.params.dashboard
     const drawings = await getDrawings(uid)
+    //const drawings = [{TITLE: 'untitled', DATE: '12/9/2023'}]
+    const user = await getUser(uid)
     return {
         props: {
+            USER: user,
             DRAWINGS: drawings
         }
     }
@@ -20,7 +23,7 @@ export async function getServerSideProps(context) {
 function Drawings(props) {
     const [user, setUser] = useState(false)
     const router = useRouter()
-    onAuthStateChanged(auth, ( user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (!user) {
             router.push('/login')
         } else {
@@ -29,7 +32,7 @@ function Drawings(props) {
     })
     if (user) {
         return (
-            <Layout open='Drawings' user={user}>
+            <Layout open='Drawings' user={props.USER}>
                 <DrawingSection title='Drawings' data={props.DRAWINGS}/>
             </Layout>
         )
