@@ -1,6 +1,6 @@
 import Layout from '../../components/Layout'
 import styles from '../../styles/Dashboard.module.css'
-import { getUser } from '../../components/Utilities'
+import { getUser, getDrawings } from '../../components/Utilities'
 import { CollaborationSection } from '../../components/DashboardUtil'
 import { auth } from '../../configFirebase'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -10,6 +10,7 @@ import { useState } from 'react'
 export async function getServerSideProps(context) {
     const uid = context.params.dashboard
     const user = await getUser(uid)
+    const drawings = await getDrawings(uid)
     return {
         props: {
             USER: user,

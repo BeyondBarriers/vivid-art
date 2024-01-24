@@ -42,25 +42,35 @@ export function Group({ name, count }) {
 }
 
 export function GroupSection({ title, data }) {
-    return (
-        <div>
-            <Header text={title}/>
-            <div className={styles.section}>
-                {data.map((snapshot) =>
-                    <Group name={snapshot.NAME} count={snapshot.COUNT}/>
-                )}
-            </div>
-        </div>
-    )
-}
-
-export function DrawingSection({ title, data }) {
     console.log(data)
+    
     if (data.length == 0) {
         return (
             <div>
                 <Header text={title}/>
-                <p>No drawings to display</p>
+                <p className={styles.none}>No group members to display</p>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header text={title}/>
+                <div className={styles.section}>
+                    {data.map((snapshot) =>
+                        <Group name={snapshot.NAME} count={snapshot.COUNT}/>
+                    )}
+                </div>
+            </div>
+        )
+    }
+}
+
+export function DrawingSection({ title, data }) {
+    if (data.length == 0) {
+        return (
+            <div>
+                <Header text={title}/>
+                <p className={styles.none}>No drawings to display</p>
             </div>
         )
     } else {
@@ -78,6 +88,14 @@ export function DrawingSection({ title, data }) {
 }
 
 export function CollaborationSection({ title, data }) {
+    if (data.length == 0) {
+        return (
+            <div>
+                <Header text={title}/>
+                <p className={styles.none}>No drawings to display</p>
+            </div>
+        )
+    }
     return (
         <div>
             <Header text={title}/>

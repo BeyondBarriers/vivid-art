@@ -1,6 +1,6 @@
 import Layout from '../../components/Layout'
 import styles from '../../styles/Dashboard.module.css'
-import { getUser } from '../../components/Utilities'
+import { getUser, getGroup } from '../../components/Utilities'
 import { GroupSection } from '../../components/DashboardUtil'
 import { auth } from '../../configFirebase'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -10,9 +10,14 @@ import { useState } from 'react'
 export async function getServerSideProps(context) {
     const uid = context.params.dashboard
     const user = await getUser(uid)
+    const members = []
+    user.GROUPS.forEach(async(group) => {
+        members.push(group)
+    })
     return {
         props: {
-            USER: user
+            USER: user,
+            MEMBERS: members,
         }
     }
 }
@@ -28,9 +33,10 @@ function Groups(props) {
         }
     })
     if (user) {
+        console.log(props.MEMBERS)
         return (
             <Layout open='Groups' user={props.USER}>
-                <GroupSection title='Groups' data={props.USER.GROUPS}/>
+                <GroupSection title='Groups' data={props.MEMBERS}/>
             </Layout>
         )
     }
